@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 // ✅ Create Classroom
@@ -58,7 +58,7 @@ export const getClassroomById = async (req, res) => {
     });
 
     if (!classroom) {
-      return res.status(404).json({ error: "Classroom not found" });
+      return res.status(404).json({ error: 'Classroom not found' });
     }
 
     res.json(classroom);
@@ -100,7 +100,7 @@ export const deleteClassroom = async (req, res) => {
       where: { id: Number(id) },
     });
 
-    res.json({ message: "Classroom deleted successfully" });
+    res.json({ message: 'Classroom deleted successfully' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });

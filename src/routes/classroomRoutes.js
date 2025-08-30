@@ -1,18 +1,18 @@
-import express from "express";
+import express from 'express';
 import {
   createClassroom,
   getClassrooms,
   getClassroomById,
   updateClassroom,
   deleteClassroom,
-} from "../controllers/classroomController.js";
+} from '../controllers/classroomController.js';
 
 const router = express.Router();
 
-router.post("/", createClassroom);
-router.get("/", getClassrooms);
-router.get("/:id", getClassroomById);
-router.put("/:id", updateClassroom);
-router.delete("/:id", deleteClassroom);
+router.post('/', createClassroom);
+router.get('/', getClassrooms);
+router.get('/:id', getClassroomById);
+router.put('/:id', updateClassroom);
+router.delete('/:id', deleteClassroom);
 
 export default router;

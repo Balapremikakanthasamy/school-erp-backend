@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export const createSchool = async (req, res) => {
@@ -28,7 +28,7 @@ export const getSchoolById = async (req, res) => {
       where: { id: Number(req.params.id) },
       include: { classrooms: true, teachers: true, students: true },
     });
-    if (!school) return res.status(404).json({ error: "School not found" });
+    if (!school) return res.status(404).json({ error: 'School not found' });
     res.json(school);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -51,7 +51,7 @@ export const updateSchool = async (req, res) => {
 export const deleteSchool = async (req, res) => {
   try {
     await prisma.school.delete({ where: { id: Number(req.params.id) } });
-    res.json({ message: "School deleted" });
+    res.json({ message: 'School deleted' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
