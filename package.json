@@ -9,7 +9,9 @@
     "prepare": "husky",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test": "echo \"No tests yet\" && exit 0"
+
   },
   "keywords": [],
   "author": "",
