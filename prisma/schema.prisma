@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/* ── Enum for User Roles ───────────────────────── */
+enum Role {
+  student
+  staff
+  admin
+}
+
+/* ── Core ERP entities ───────────────────────── */
+
+model School {
+  id          Int         @id @default(autoincrement())
+  name        String
+  code        String?     @unique
+  address     String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  users       User[]
+  teachers    Teacher[]
+  students    Student[]
+  classrooms  Classroom[]
+}
+
+model Teacher {
+  id            Int          @id @default(autoincrement())
+  name          String
+  subject       String?      // make non-nullable if every teacher must have a subject
+  email         String?      @unique
+  phone         String?
+  schoolId      Int
+  school        School       @relation(fields: [schoolId], references: [id])
+
+  // optional homeroom ownership
+  classTeacherOf Classroom[] @relation("ClassTeacher")
+
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model Classroom {
+  id             Int        @id @default(autoincrement())
+  name           String     // e.g., "10-A"
+  grade          Int?
+  section        String?
+  schoolId       Int
+  school         School     @relation(fields: [schoolId], references: [id])
+
+  // homeroom teacher (optional)
+  classTeacherId Int?
+  classTeacher   Teacher?   @relation("ClassTeacher", fields: [classTeacherId], references: [id])
+
+  students       Student[]
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  @@unique([schoolId, name]) // classroom name is unique within a school
+}
+
+model Student {
+  id           Int        @id @default(autoincrement())
+  name         String
+  admissionNo  String
+  schoolId     Int
+  classroomId  Int?
+  school       School     @relation(fields: [schoolId], references: [id])
+  classroom    Classroom? @relation(fields: [classroomId], references: [id])
+  dob          DateTime?
+  gender       String?
+  parentPhone  String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([schoolId, admissionNo]) // admission no unique within a school
+}
+
+/* ── Authentication User ───────────────────────── */
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  password  String
+  role      Role      @default(student)
+  schoolId  Int?
+  school    School?   @relation(fields: [schoolId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+    refreshToken String?   // will store latest refresh token
+
+}
+
