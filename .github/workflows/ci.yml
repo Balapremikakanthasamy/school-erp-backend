@@ -33,4 +33,4 @@ jobs:
 
       - name: Deploy (staging)
         if: github.ref == 'refs/heads/main'
-        run: echo "🚀 Deploy step goes here"
+        run: echo '🚀 Deploy step goes here'
