@@ -18,3 +18,9 @@ prisma/dev.db
 logs
 *.log
 *.log.*
+
+node_modules
+dist
+build
+coverage
+.env

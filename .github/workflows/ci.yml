@@ -2,33 +2,35 @@ name: CI Pipeline
 
 on:
   push:
-    branches: ['main']
+    branches: [main]
   pull_request:
-    branches: ['main']
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: '18'
 
       - name: Install dependencies
         run: npm install
 
-      - name: Run ESLint
-        run: npx eslint .
+      - name: Run Prettier check
+        run: npx prettier --check . --config .prettierrc
 
-      - name: Run Prisma Migrate
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: npx prisma migrate deploy
+      - name: Lint code
+        run: npm run lint
 
       - name: Run tests
         run: npm test
+
+      - name: Deploy (staging)
+        if: github.ref == 'refs/heads/main'
+        run: echo "🚀 Deploy step goes here"
